@@ -1,5 +1,5 @@
-#echo "deb http://apt.postgresql.org/pub/repos/apt/ precise-pgdg main" > /etc/apt/sources.list.d/pgdg.list
-#wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
+echo "deb http://apt.postgresql.org/pub/repos/apt/ precise-pgdg main" > /etc/apt/sources.list.d/pgdg.list
+wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
 
 
 sudo apt-get update
@@ -30,7 +30,7 @@ sudo apt-get install -y -q sendmail
 
 # utilities
 
-sudo apt-get install -y -q curl
+sudo apt-get install -y -q curl htop tmux
 
 	
 
@@ -43,7 +43,7 @@ sudo su postgres <<EOSU
 	  psql --command "GRANT ALL PRIVILEGES ON DATABASE opencarpool TO web;"
 EOSU
 
-	
+
 
 # install opencarpool
 sudo adduser opencarpool --disabled-password --disabled-login --gecos ""
@@ -53,15 +53,15 @@ sudo su opencarpool <<EOSU
 	  # get the sources
 	  git clone https://github.com/amife/carpool.git dev.opencarpool.org
 	  # get Smarty lib
-	  # wget http://www.smarty.net/files/Smarty-3.1.21.tar.gz
-	  # tar xfz Smarty-3.1.21.tar.gz
-	  # mkdir -p dev.opencarpool.org/website/lib/smarty
-	  # cp -r Smarty-3.1.21/libs dev.opencarpool.org/website/lib/smarty
+          wget http://www.smarty.net/files/Smarty-3.1.21.tar.gz
+          tar xfz Smarty-3.1.21.tar.gz
+          mkdir -p dev.opencarpool.org/website/lib/smarty
+          cp -r Smarty-3.1.21/libs dev.opencarpool.org/website/lib/smarty
 	  cd ~/dev.opencarpool.org
 	  # fix access rights
-	  chmod a+x service/init-script.sh
-	  chmod a+x service/src/jsonrpc_webservice
-	  chmod a+w website/tmp/templates_c
+	  chmod -v a+x service/init-script.sh
+	  chmod -v a+x service/src/jsonrpc_webservice
+	  chmod -v a+w website/tmp/templates_c
 	  # create configuration files
 	  cp service/ocp_webservice_dev.cfg.example service/ocp_webservice_dev.cfg
 	  cp website/functions/config.php.example website/functions/config.php
@@ -82,7 +82,7 @@ sudo service opencarpool_jsonrpc start
 
 # Apache config
 
-sudo mv /home/dev.opencarpool.org/vagrant/opencarpool-apache.conf /etc/apache2/sites-available/001-opencarpool.conf
+sudo cp -v /home/opencarpool/dev.opencarpool.org/vagrant/opencarpool-apache.conf /etc/apache2/sites-available/001-opencarpool.conf
 
 sudo a2ensite 001-opencarpool.conf
 
